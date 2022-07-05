@@ -20,7 +20,7 @@ Servicio para detectar si una secuencia de ADN corresponde a un mutante
 - Travis CI
 - MongoDB
 - Openshift
-- 
+
 
 # Arquitectura de software
 - Microservicios
@@ -30,21 +30,19 @@ Servicio para detectar si una secuencia de ADN corresponde a un mutante
 # Diagram EIP
 ![My Image](eip-diagram.png)
 
-# Descripción tecnica
+# Descripción técnica
 
-El servicio expone un WS tipo Rest con el metodo POST -> /mutant/  para recibir una secuencia de ADN.
+El servicio expone un WS tipo Rest con el método POST -> /mutant/ para recibir una secuencia de ADN.
 
-En la ruta de transformacion, el servicio inicialmente realiza la validacion de la estructura de la secuencia de ADN. 
+En la ruta de transformación, el servicio inicialmente realiza la validación de la estructura de la secuencia de ADN.
 
-Si la estructura  es invalida, el servicio responde con HTTP ->403  y mensaje con el error. 
+Si la estructura es invalida, el servicio responde con HTTP ->403 y mensaje con el error.
 
-Si la estructura es correcta el servicio realiza la validacion del ADN para detectar si es un mutante. Toda la logica de la validacion se encuentra en el paquete com.meli.challenge.mutant.detector.validator.
+Si la estructura es correcta el servicio realiza la validación del ADN para detectar si es un mutante.
 
-
-Una vez realizada la validacion, el servicio almacenara la secuencia de ADN y el resultado ( si es mutante o no ) en la base de datos ->mutant, collection->dna utilizando el motor de base de datos No SQL Mongo.
-Finalmente  si el ADN corresponde a un mutante, el servicio responde HTTP-> 200, en caso contrario HTTP -> 403 
-
-Para compilar y ejecutar la apliación se necesita 
+Toda la lógica de la validación se encuentra en el paquete com.meli.challenge.mutant.detector.validator.
+Una vez realizada la validación, el servicio almacena la secuencia de ADN y el resultado ( si es mutante o no ) en la base de datos ->mutant, collection->dna utilizando el motor de base de datos No SQL Mongo. Finalmente si el ADN corresponde a un mutante, el servicio responde HTTP-> 200, en caso contrario HTTP -> 403
+ 
 
 # Servicio mutant
 
@@ -65,12 +63,13 @@ Response
 - Code 403 - Si el ADN es NO mutante
 
 # Instrucciones de ejecución
-## Prerequisitos
+
+## Ejecución local
+
+### Prerrequisitos
 
 - [JDK 11](https://openjdk.org/projects/jdk/11/)
 - [Maven 3](https://maven.apache.org)
-
-## Ejecución local
 
 Para ejecutar el servicio de manera local ejecute el comando 
 ```shell
