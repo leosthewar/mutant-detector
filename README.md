@@ -28,8 +28,7 @@ Servicio para detectar si una secuencia de ADN corresponde a un mutante
 
 
 # Diagram EIP
-
-![Screenshot](EIP-Diagram-mutant detector.png)
+![My Image](eip-diagram.png)
 
 # Descripción tecnica
 
@@ -78,7 +77,7 @@ Para ejecutar el servicio de manera local ejecute el comando
 mvn spring-boot:run
 ```
 El servicio iniciaria en el puerto 8080.
-Para su ejecucion local puede usar el siguiente curl
+Para su ejecucion local puede usar el siguiente CURL
 ```shell
 curl --location --request POST 'http://localhost:8080/mutant/' \
 --header 'Content-Type: application/json' \
@@ -107,3 +106,23 @@ Posteriormente y para acceder al servicio desde afuera del cluster de Openshift,
 oc create route edge --service=mutant-detector
 ```
 
+Para consultar la ruta ejecute el comando 
+```shell
+oc get route 
+```
+ La ruta para presente proyecto es 
+
+ ```shell
+ mutant-detector-leosthewar-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com
+```
+
+De esta manera, para ejecutar el servicio desplegado en Openshift puede usar el siguiente CURL
+
+ ```shell
+
+curl --location --request POST 'https://mutant-detector-leosthewar-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/mutant/' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "dna":["ATGCG","CAGCG","TTCTG","ACAAT","ACCAT"]
+}'
+```
