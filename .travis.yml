@@ -7,4 +7,4 @@ before_install:
 jdk:
   - openjdk11
 after_success:
-  - mvn jacoco:report coveralls:report
+  - mvn clean test jacoco:report coveralls:report
