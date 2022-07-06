@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.meli.challenge.mutant.detector.domain.model.Request;
-import com.mongodb.client.MongoClient;
 
 /**
  * 
@@ -45,15 +44,6 @@ public class ApplicationTests{
 	String randomServerPort;
 	
 	private  URI uri;
-
-	@TestConfiguration
-	static class Config {
-		@Bean("mongoBean")
-		MongoClient mongoClient() {
-
-			return null;
-		}
-	}
 
 
 	@Before

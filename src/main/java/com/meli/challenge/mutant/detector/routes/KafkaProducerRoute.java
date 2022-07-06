@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.meli.challenge.mutant.detector.configuration.ConfigurationRoute;
+import com.meli.challenge.mutant.detector.properties.KafkaProducerProperties;
 
 /**
  * 
@@ -22,9 +23,13 @@ import com.meli.challenge.mutant.detector.configuration.ConfigurationRoute;
 @Component
 public class KafkaProducerRoute extends ConfigurationRoute {
 	
-	@Value("${productor.kafka.route}")
-	String endpointkafka;
 
+	private KafkaProducerProperties kafkaProducerProperties;
+	
+	public KafkaProducerRoute(KafkaProducerProperties kafkaProducerProperties) {
+		this.kafkaProducerProperties=kafkaProducerProperties;
+	}
+	
 	@Override
 	public void configure() throws Exception {
 
@@ -45,11 +50,9 @@ public class KafkaProducerRoute extends ConfigurationRoute {
 		from("direct:producer-kafka-route").routeId("producer-kafka-route")
 			.log(LoggingLevel.DEBUG," Send to db ${body}")
 			.marshal().json(JsonLibrary.Jackson)
-			.to(endpointkafka)
+			.to(kafkaProducerProperties.getCamelEndpoint())
 			.log(LoggingLevel.INFO,"DNA saved successfully :${body} ")
-			.setBody(simple(""))
 			.end();
-		
 
 	}
 
