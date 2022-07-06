@@ -1,0 +1,14 @@
+spec:
+  to:
+    kind: Service
+    name: mutant-detector
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None
+  
+  
+  

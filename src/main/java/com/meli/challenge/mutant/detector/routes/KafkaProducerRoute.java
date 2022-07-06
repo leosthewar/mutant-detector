@@ -52,6 +52,7 @@ public class KafkaProducerRoute extends ConfigurationRoute {
 			.marshal().json(JsonLibrary.Jackson)
 			.to(kafkaProducerProperties.getCamelEndpoint())
 			.log(LoggingLevel.INFO,"DNA saved successfully :${body} ")
+			.setBody(simple(""))
 			.end();
 
 	}

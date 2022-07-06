@@ -15,6 +15,7 @@
 	<description>Service to detect mutants</description>
 	<properties>
 		<java.version>11</java.version>
+		<jkube.generator.from>registry.redhat.io/fuse7/fuse-java-openshift-jdk11-rhel8</jkube.generator.from>
 		<camel.version>3.7.0</camel.version>
 	</properties>
 	<dependencies>
@@ -133,5 +134,33 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<profiles>
+		<profile>
+			<id>openshift</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.jkube</groupId>
+						<artifactId>openshift-maven-plugin</artifactId>
+						<version>1.8.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>resource</goal>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<resources>
+								<env>
+									<JAVA_APP_JAR>${project.artifactId}-${project.version}.jar</JAVA_APP_JAR>
+								</env>
+							</resources>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
