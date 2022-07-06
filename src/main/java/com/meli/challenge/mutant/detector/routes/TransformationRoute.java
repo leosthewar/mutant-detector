@@ -34,7 +34,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log(LoggingLevel.DEBUG,"Start DNA Validation: ${body.dna}")
 			.bean("validateDNAStructureComponent","validate")
 			.bean("transformationComponent","mutantValidation")
-			.to("direct:producer-db-route")
+			.to("direct:producer-kafka-route")
 			.end();
 		
 		

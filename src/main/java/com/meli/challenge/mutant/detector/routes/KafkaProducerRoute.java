@@ -4,27 +4,23 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
 
 import com.meli.challenge.mutant.detector.configuration.ConfigurationRoute;
-import com.meli.challenge.mutant.detector.properties.DBProducerProperties;
 
 /**
  * 
- * DBProducerRoute </br>
- * Route to save the message in mongo db
+ * KafkaProducerRoute </br>
+ * Route to save send the message to kafka
  * 
  * @author Leonardo Sthewar Rincon - leo.sthewar.rincon@gmail.com
  * @since 1/07/2022
  *
  */
 @Component
-public class DBProducerRoute extends ConfigurationRoute {
+public class KafkaProducerRoute extends ConfigurationRoute {
 	
-	private DBProducerProperties dbProperties;
-	public DBProducerRoute(DBProducerProperties dbProperties) {
-		this.dbProperties = dbProperties;
-	}
 
 	@Override
 	public void configure() throws Exception {
@@ -43,9 +39,10 @@ public class DBProducerRoute extends ConfigurationRoute {
 			.to(ROUTE_EXCEPTION);
 
 		
-		from("direct:producer-db-route").routeId("producer-db-route")
+		from("direct:producer-kafka-route").routeId("producer-kafka-route")
 			.log(LoggingLevel.DEBUG," Send to db ${body}")
-			.to(dbProperties.getRoute()+"?database="+dbProperties.getDatabase()+"&collection="+dbProperties.getCollection()+"&operation=insert")
+			.marshal().json(JsonLibrary.Jackson)
+			.to("kafka:dna")
 			.log(LoggingLevel.INFO,"DNA saved successfully :${body} ")
 			.setBody(simple(""))
 			.end();
