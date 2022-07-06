@@ -1,11 +1,10 @@
 # mutant-detector
-
 [![Build Status](https://app.travis-ci.com/leosthewar/mutant-detector.svg?branch=main)](https://app.travis-ci.com/leosthewar/mutant-detector)
 [![Coverage Status](https://coveralls.io/repos/github/leosthewar/mutant-detector/badge.svg?branch=main)](https://coveralls.io/github/leosthewar/mutant-detector?branch=main)
 
 Challenge técnico Mercado libre
 
-Servicio para detectar si una secuencia de ADN corresponde a un mutante
+Servicio REST Post para detectar si una secuencia de ADN corresponde a un mutante y enviar el resultado de la validación a una topic de Kafka.
 
 # Herramientas, tecnologías y lenguajes
 
@@ -13,24 +12,28 @@ Servicio para detectar si una secuencia de ADN corresponde a un mutante
 - Java 11
 - Spring Boot 2.4.13
 - Camel 3.7.0
-- undertow
+- Undertow
 - Eclipse IDE
 - Visual Studio
 - Jacoco
 - Coveralls
 - Travis CI
+- JKube
 - MongoDB
 - Openshift
+- Apache kafka
 
 
 
-# Arquitectura de software
+### Arquitectura de software y patrones destacados
 - Microservicios
-- Patron de Integracion empresarial - EIP
+- Patrón de Integración empresarial - EIP
+- Patrón de cadena de responsabilidad
+- Arquitectura orientada a eventos 
 
 
 # Diagram EIP
-![My Image](eip-diagram.png)
+![My Image](eip-mutant-detector.drawio.png)
 
 # Descripción técnica
 
@@ -43,7 +46,10 @@ Si la estructura es invalida, el servicio responde con HTTP ->403 y mensaje con 
 Si la estructura es correcta el servicio realiza la validación del ADN para detectar si es un mutante.
 
 Toda la lógica de la validación se encuentra en el paquete com.meli.challenge.mutant.detector.validator.
-Una vez realizada la validación, el servicio almacena la secuencia de ADN y el resultado ( si es mutante o no ) en la base de datos ->mutant, collection->dna utilizando el motor de base de datos No SQL Mongo. Finalmente si el ADN corresponde a un mutante, el servicio responde HTTP-> 200, en caso contrario HTTP -> 403
+En la clase MutantValidator se ha creado el metod boolean  isMutant, El cual recibe como parámetro una lista Strings con la secuencia de ADN a validar.  El método realiza la validación de la secuencia por filas, columnas, diagonales ( en ese orden,  utilizando el patron chain of responsability).  
+
+Una vez realizada la validación, produce un evento enviando un mensaje en el topic -> dna creado en Apache Kafka. En el mensaje se envía  secuencia de ADN y el resultado ( si es mutante o no ).
+Finalmente si el ADN corresponde a un mutante, el servicio responde HTTP-> 200, en caso contrario HTTP -> 403
  
 
 # Servicio mutant
@@ -53,6 +59,8 @@ Una vez realizada la validación, el servicio almacena la secuencia de ADN y el 
 Request
 
 - Content-Type: application/json
+
+Payload ejemplo
 ```shell
 {
   "dna":["ATCCG","CAGCG","TTCTG","ACAAT","CCCAT"]
@@ -61,8 +69,8 @@ Request
 
 
 Response
-- Code 200 - Si el ADN es mutante
-- Code 403 - Si el ADN es NO mutante
+- HTTP Code 200 - Si el ADN es mutante
+- HTTP Code 403 - Si el ADN es NO mutante
 
 # Instrucciones de ejecución
 
@@ -88,36 +96,51 @@ curl --location --request POST 'http://localhost:8080/mutant/' \
 ```
 
 ## Despliegue en Openshift
+### Prerrequisitos
+- Cluster de Openshift
+- Credenciales de acceso al cluster
+- CLI  Openshift
+Para este caso se uso un servidor sandbox proporcionado por Redhat https://developers.redhat.com/developer-sandbox
 
-Para desplegar el servicio en OpenShift,  usar la CLI de OpenShift y ejecutar el siguiente comando:
+
+
+Para desplegar el servicio en Openshift,  se usa la CLI de Openshift ejecutando los siguientes comandos 
+- Iniciar sesión  
 ```shell
-oc new-app --as-deployment-config --name=mutant-detector  registry.redhat.io/fuse7/fuse-java-openshift-jdk11-rhel8~https://github.com/leosthewar/mutant-detector 
+oc login
 ```
-
-El cual creara los siguientes recursos de Openshift:
-
- - ImageStream llamado "mutant-detector"
- - BuildConfig llamado "mutant-detector"
- - DeploymentConfig llamado "mutant-detector"
- - Service llamado "mutant-detector"
-
-Posteriormente y para acceder al servicio desde afuera del cluster de Openshift, se debe crear una ruta para exponer el service "mutant-detector", para lo cual ejecute el siguiente comando
-
+- Seleccionar el Project ( en este caso en el sandbox crea un project de manera automática y no se permite crear mas , por lo cual este paso se puede omitir) 
 ```shell
-oc create route edge --service=mutant-detector
+oc project <project>
 ```
-
-Para consultar la ruta ejecute el comando 
+- Crear Configmap con los propiedades del servicio
 ```shell
-oc get route 
+oc create configmap mutant-detector-config --from-file=src/main/resources/  --dry-run=client -o yaml | oc apply --force -f -
 ```
- La ruta para presente proyecto es 
-
- ```shell
- mutant-detector-leosthewar-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com
+- Compilar y desplegar 
+```shell
+mvn -Popenshift clean package  oc:build oc:resource oc:apply -DskipTests
 ```
+Se crearan, entre otros los  siguientes recursos de Openshift:
 
-De esta manera, para ejecutar el servicio desplegado en Openshift puede usar el siguiente CURL
+ - ImageStream "mutant-detector"
+ - BuildConfig "mutant-detector"
+ - DeploymentConfig "mutant-detector"
+ - Service "mutant-detector"
+ - Route  "mutant-detector"
+
+
+
+Para consultar la ruta  mediante la cual se puede consumir el servicio,   ejecute el comando 
+```shell
+oc get route mutant-detector
+```
+ La ruta para el presente proyecto es 
+
+https://mutant-detector-leosthewar-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com
+
+
+CURL de ejemplo para consumir el servicio: 
 
  ```shell
 
@@ -127,3 +150,6 @@ curl --location --request POST 'https://mutant-detector-leosthewar-dev.apps.sand
   "dna":["ATGCG","CAGCG","TTCTG","ACAAT","ACCAT"]
 }'
 ```
+
+### Consideraciones 
+Para las ejecuciones locales y en openshift se deben tener configuradas las properties de  conexión y credenciales del servidor de apache kafka

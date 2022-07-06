@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.meli.challenge.mutant.detector.configuration.ConfigurationRoute;
