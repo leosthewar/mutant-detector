@@ -9,10 +9,9 @@
 		<version>2.4.13</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.meli.challenge.mutant</groupId>
+	<groupId>com.meli.challenge.mutant.detector</groupId>
 	<artifactId>mutant-detector</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
-	<name>detector</name>
 	<description>Service to detect mutants</description>
 	<properties>
 		<java.version>11</java.version>
@@ -23,11 +22,6 @@
 			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
 			<version>${camel.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
@@ -55,11 +49,6 @@
 			<version>${camel.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.camel.springboot</groupId>
-			<artifactId>camel-kafka-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-bean-validator</artifactId>
 			<version>${camel.version}</version>
@@ -78,11 +67,6 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-openapi-java</artifactId>
 			<version>${camel.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.vintage</groupId>

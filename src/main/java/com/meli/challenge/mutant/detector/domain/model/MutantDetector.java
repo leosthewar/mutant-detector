@@ -1,18 +1,18 @@
 /**
  */
-package com.meli.challenge.mutant.detector.model;
+package com.meli.challenge.mutant.detector.domain.model;
 
 /**
  * MutantDetector </br>
- * DTO to save the  dna sequence, isMutant state and matrix of characters for the DNA
+ * Model class to save the  dna sequence, isMutant state and matrix of characters for the DNA
  * 
  * @author Leonardo Sthewar Rincon - leo.sthewar.rincon@gmail.com
  * @since 4/07/2022
  * 
  */
-public class MutantDetectorDTO extends DnaDTO {
+public class MutantDetector extends Dna {
 
-	public MutantDetectorDTO(Boolean mutant) {
+	public MutantDetector(Boolean mutant) {
 		super(mutant);
 	}
 	private char[][] matrixDNA;

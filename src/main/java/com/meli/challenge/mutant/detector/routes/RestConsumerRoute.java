@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.meli.challenge.mutant.detector.configuration.ConfigurationRoute;
-import com.meli.challenge.mutant.detector.model.RequestDTO;
+import com.meli.challenge.mutant.detector.domain.model.Request;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class RestConsumerRoute extends ConfigurationRoute {
     		.consumes(MediaType.APPLICATION_JSON_VALUE)
     		.produces(MediaType.APPLICATION_JSON_VALUE)
     		.post("/mutant/")
-    		.type(RequestDTO.class)
+    		.type(Request.class)
             .to("direct:mutant-detector-route");
         
 

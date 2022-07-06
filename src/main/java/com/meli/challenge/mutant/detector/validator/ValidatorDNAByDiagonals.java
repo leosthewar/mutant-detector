@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.meli.challenge.mutant.detector.configuration.PatternsDNAValidationsConfiguration;
-import com.meli.challenge.mutant.detector.model.MutantDetectorDTO;
+import com.meli.challenge.mutant.detector.domain.model.MutantDetector;
 
 /**
  * 
@@ -30,13 +30,13 @@ public class ValidatorDNAByDiagonals extends ValidatorDNA {
 	 * obtain all the diagonals.<br>
 	 * First iterate rigth to left sencondly left to rigth diagonals. <br>
 	 * By each diagonal evaluate the IsMutant Pattern. If one diagonal matches, stop
-	 * the iteration and update dto state Mutant. Otherwise if no diagonal matches,
+	 * the iteration and update  state Mutant. Otherwise if no diagonal matches,
 	 * invoke the next validation ( if exists )
 	 * 
-	 * @param MutantDetectorDTO mutantDetectorDTO
+	 * @param MutantDetector mutantDetector
 	 */
-	public void validate(MutantDetectorDTO mutantDetectorDTO) {
-		char[][] matrixDNA = mutantDetectorDTO.getMatrixDNA();
+	public void validate(MutantDetector mutantDetector) {
+		char[][] matrixDNA = mutantDetector.getMatrixDNA();
 		boolean isMutant = false;
 		int n = matrixDNA.length;
 
@@ -64,10 +64,10 @@ public class ValidatorDNAByDiagonals extends ValidatorDNA {
 		for (j = 1; j < n && !isMutant; ++j) {
 			isMutant = patternsDNAValidations.getPatternIsMutant().matcher(getDiagonal(matrixDNA, i, j)).matches();
 		}
-		mutantDetectorDTO.setMutant(isMutant);
+		mutantDetector.setMutant(isMutant);
 		logger.debug("validation Is Mutant by diagonal:{}", isMutant);
 		if (!isMutant && this.nextValidation != null) {
-			this.nextValidation.validate(mutantDetectorDTO);
+			this.nextValidation.validate(mutantDetector);
 		}
 	}
 

@@ -5,9 +5,9 @@ package com.meli.challenge.mutant.detector.transformation;
 import org.apache.camel.Exchange;
 import org.springframework.stereotype.Component;
 
-import com.meli.challenge.mutant.detector.model.RequestDTO;
-import com.meli.challenge.mutant.detector.model.DnaDTO;
-import com.meli.challenge.mutant.detector.model.ResponseErrorDTO;
+import com.meli.challenge.mutant.detector.domain.model.Dna;
+import com.meli.challenge.mutant.detector.domain.model.Request;
+import com.meli.challenge.mutant.detector.domain.model.ResponseError;
 import com.meli.challenge.mutant.detector.validator.MutantValidator;
 
 /**
@@ -34,10 +34,10 @@ public class TransformationComponent {
 	 * @param request
 	 * @param exchange
 	 */
-	public void mutantValidation(RequestDTO request, Exchange exchange) {
+	public void mutantValidation(Request request, Exchange exchange) {
 
 		boolean isMutant = mutantValidator.isMutant(request.getDna());
-		DnaDTO dna = new DnaDTO(isMutant);
+		Dna dna = new Dna(isMutant);
 		dna.setDna(request.getDna());
 		exchange.getIn().setBody(dna);
 		if (!isMutant) {
@@ -51,9 +51,9 @@ public class TransformationComponent {
 	 * @param exchange
 	 */
 	public void generareResponseError(Exchange exchange) {
-		ResponseErrorDTO dnaResponseErrorDTO = new ResponseErrorDTO();
-		dnaResponseErrorDTO.setError(exchange.getProperty("exceptionMessage", String.class));
-		exchange.getIn().setBody(dnaResponseErrorDTO);
+		ResponseError dnaResponseError = new ResponseError();
+		dnaResponseError.setError(exchange.getProperty("exceptionMessage", String.class));
+		exchange.getIn().setBody(dnaResponseError);
 	}
 
 }

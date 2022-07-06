@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.meli.challenge.mutant.detector.configuration.PatternsDNAValidationsConfiguration;
-import com.meli.challenge.mutant.detector.model.MutantDetectorDTO;
+import com.meli.challenge.mutant.detector.domain.model.MutantDetector;
 
 /**
  * 
@@ -36,14 +36,14 @@ public class ValidatorDNAByColumns extends ValidatorDNA {
 	/**
 	 * Method to validate DNA by columns.This method iterate the DNA matrix column
 	 * by column and evaluate the IsMutant Pattern for each column. If one column
-	 * matches, stop the iteration and update dto state Mutant. Otherwise if no column matches, invoke the next
+	 * matches, stop the iteration and update  state Mutant. Otherwise if no column matches, invoke the next
 	 * validation (if exists)
 	 * 
-	 * @param MutantDetectorDTO mutantDetectorDTO
+	 * @param MutantDetector mutantDetector
 	 */
-	public void validate(MutantDetectorDTO mutantDetectorDTO) {
-		char[][] matrixDNA = matrixDNAGenerator.generateMatrixDNA(mutantDetectorDTO.getDna());
-		mutantDetectorDTO.setMatrixDNA(matrixDNA);
+	public void validate(MutantDetector mutantDetector) {
+		char[][] matrixDNA = matrixDNAGenerator.generateMatrixDNA(mutantDetector.getDna());
+		mutantDetector.setMatrixDNA(matrixDNA);
 		boolean isMutant = false;
 		for (int col = 0; col < matrixDNA.length && !isMutant; col++) {
 			StringBuilder column = new StringBuilder();
@@ -52,10 +52,10 @@ public class ValidatorDNAByColumns extends ValidatorDNA {
 			}
 			isMutant = patternsDNAValidations.getPatternIsMutant().matcher(column).matches();
 		}
-		mutantDetectorDTO.setMutant(isMutant);
+		mutantDetector.setMutant(isMutant);
 		logger.debug("validation Is Mutant by columns:{}", isMutant);
 		if (!isMutant && this.nextValidation != null) {
-			this.nextValidation.validate(mutantDetectorDTO);
+			this.nextValidation.validate(mutantDetector);
 		}
 	}
 }

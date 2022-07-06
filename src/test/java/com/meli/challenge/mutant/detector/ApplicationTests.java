@@ -21,7 +21,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.meli.challenge.mutant.detector.model.RequestDTO;
+import com.meli.challenge.mutant.detector.domain.model.Request;
 import com.mongodb.client.MongoClient;
 
 /**
@@ -70,17 +70,17 @@ public class ApplicationTests{
 	 * @throws URISyntaxException
 	 */
 	@Test
-	public void testNoMutant() throws URISyntaxException {
+	public void testNoMutant()  {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "ATCCG", "CAGCG", "TTCTG", "ACAAT", "TCCAT" };
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(403, result.getStatusCodeValue());
@@ -94,15 +94,15 @@ public class ApplicationTests{
 	@Test
 	public void testMutantValidateByRows() throws URISyntaxException {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "CCCCG", "CAGCG", "TTCTG", "ACAAT", "CCCAT" };
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(200, result.getStatusCodeValue());
@@ -115,15 +115,15 @@ public class ApplicationTests{
 	@Test
 	public void testMutantValidateByColumns() {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "CTGAG", "CAGCG", "CTCTG", "CCAAT", "CCCAT" };
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(200, result.getStatusCodeValue());
@@ -135,15 +135,15 @@ public class ApplicationTests{
 	@Test
 	public void testMutantValidateByDiagonals() {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "ATCCG", "CAGCG", "TTCTG", "ACAAT", "CCCAT" };
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(200, result.getStatusCodeValue());
@@ -155,15 +155,15 @@ public class ApplicationTests{
 	@Test
 	public void testMutantDNABadStructure() {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "ATCCG", "CAGCG", "TTCTG", "ACAAT", "CCCATT" };
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(403, result.getStatusCodeValue());
@@ -175,15 +175,15 @@ public class ApplicationTests{
 	@Test
 	public void testMutantDNABadStructure2() {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "ATCCG", "CAGCG", "TTCTG", "ACAAT", "CCCAB" };
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(403, result.getStatusCodeValue());
@@ -195,15 +195,15 @@ public class ApplicationTests{
 	@Test
 	public void testMutantDNABadStructure3() {
 
-		RequestDTO requestDTO = new RequestDTO();
+		Request request = new Request();
 		List<String> dna = new ArrayList<String>();
 		String[] array = { "ATC", "CAG", "TTC"};
 		Collections.addAll(dna, array);
-		requestDTO.setDna(dna);
+		request.setDna(dna);
 
-		HttpEntity<RequestDTO> request = new HttpEntity<>(requestDTO, null);
+		HttpEntity<Request> requestHttp = new HttpEntity<>(request, null);
 
-		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
+		ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestHttp, String.class);
 
 		// Verify request succeed
 		Assert.assertEquals(403, result.getStatusCodeValue());

@@ -1,18 +1,18 @@
-package com.meli.challenge.mutant.detector.model;
+package com.meli.challenge.mutant.detector.domain.model;
 
 /**
  * 
- * DnaDTO </br>
- * DTO to save the  dna sequence and isMutant state
+ * Dna </br>
+ * Model class to save the  dna sequence and isMutant state
  * 
  * @author Leonardo Sthewar Rincon - leo.sthewar.rincon@gmail.com
  * @since 5/07/2022
  *
  */
-public class DnaDTO  extends RequestDTO{
+public class Dna  extends Request {
 
 	
-	public DnaDTO(Boolean mutant) {
+	public Dna(Boolean mutant) {
 		this.mutant = mutant;
 	}
 
@@ -32,6 +32,4 @@ public class DnaDTO  extends RequestDTO{
 		this.mutant = mutant;
 	}
 
-	
-	
 }

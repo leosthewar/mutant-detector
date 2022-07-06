@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.meli.challenge.mutant.detector.model.MutantDetectorDTO;
+import com.meli.challenge.mutant.detector.domain.model.MutantDetector;
 
 /**
  * 
@@ -41,10 +41,10 @@ public class MutantValidator {
 	 */
 	public boolean isMutant(List<String> dna) {
 		
-		MutantDetectorDTO mutantDetectorDTO = new MutantDetectorDTO(false);
-		mutantDetectorDTO.setDna(dna);
-		validatorDNA.validate(mutantDetectorDTO);
+		MutantDetector mutantDetector = new MutantDetector(false);
+		mutantDetector.setDna(dna);
+		validatorDNA.validate(mutantDetector);
 
-		return mutantDetectorDTO.isMutant();
+		return mutantDetector.isMutant();
 	}
 }

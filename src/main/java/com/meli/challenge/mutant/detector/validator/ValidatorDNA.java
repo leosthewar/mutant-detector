@@ -3,7 +3,7 @@
 package com.meli.challenge.mutant.detector.validator;
 
 import com.meli.challenge.mutant.detector.configuration.PatternsDNAValidationsConfiguration;
-import com.meli.challenge.mutant.detector.model.MutantDetectorDTO;
+import com.meli.challenge.mutant.detector.domain.model.MutantDetector;
 
 /**
  * ValidatorDNA </br>
@@ -31,8 +31,8 @@ public abstract class  ValidatorDNA {
 
 	/**
 	 * Validate DNA 
-	 * @param mutantDetectorDTO
+	 * @param mutantDetector
 	 */
-	public abstract void validate(MutantDetectorDTO mutantDetectorDTO);
+	public abstract void validate(MutantDetector mutantDetector);
 	
 }

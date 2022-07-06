@@ -1,4 +1,4 @@
-package com.meli.challenge.mutant.detector.model;
+package com.meli.challenge.mutant.detector.domain.model;
 
 import java.util.List;
 
@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 
- * RequestDTO </br>
- * Class to save DNA sequence for de API Request 
+ * Request </br>
+ * Model classto save DNA sequence for de API Request 
  *
  * @author Leonardo Sthewar Rincon - leo.sthewar.rincon@gmail.com
  * @since 5/07/2022
  *
  */
-public class RequestDTO {
+public class Request {
 
 	@Valid
     @JsonProperty(value = "dna", required = true)

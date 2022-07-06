@@ -1,15 +1,15 @@
-package com.meli.challenge.mutant.detector.model;
+package com.meli.challenge.mutant.detector.domain.model;
 
 /**
  * 
- * ResponseErrorDTO </br>
+ * ResponseError </br>
  * Class to generate a Response error for the API
  * 
  * @author Leonardo Sthewar Rincon - leo.sthewar.rincon@gmail.com
  * @since 5/07/2022
  *
  */
-public class ResponseErrorDTO  {
+public class ResponseError  {
 
 	private String error;
 

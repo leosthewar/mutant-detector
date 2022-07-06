@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.meli.challenge.mutant.detector.configuration.PatternsDNAValidationsConfiguration;
+import com.meli.challenge.mutant.detector.domain.model.Request;
 import com.meli.challenge.mutant.detector.exceptions.DNAStructureException;
-import com.meli.challenge.mutant.detector.model.RequestDTO;
 
 /**
  * 
@@ -32,12 +32,12 @@ public class ValidateDNAStructureComponent {
 
 	/**
 	 * Method to valide DNA Structure
-	 * @param requestDTO
+	 * @param request
 	 * @throws DNAStructureException
 	 */
-	public void validate(RequestDTO requestDTO) throws DNAStructureException {
+	public void validate(Request request) throws DNAStructureException {
 		
-		List<String> dna= requestDTO.getDna();
+		List<String> dna= request.getDna();
 		// Validate minimun length of dna array  
 		if(dna.size()<4 ) {
 			throw new DNAStructureException("The DNA sequence minimum length is 4");
