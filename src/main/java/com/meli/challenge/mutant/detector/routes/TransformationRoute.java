@@ -31,7 +31,7 @@ public class TransformationRoute extends ConfigurationRoute {
 		 * Route to validate request, mutant validation and save the results 
 		 */
 		from("direct:mutant-detector-route").routeId("mutant-detector-route")
-			.log(LoggingLevel.INFO,"Start DNA Validation: ${body.dna}")
+			.log(LoggingLevel.DEBUG,"Start DNA Validation: ${body.dna}")
 			.bean("validateDNAStructureComponent","validate")
 			.bean("transformationComponent","mutantValidation")
 			.to("direct:producer-db-route")

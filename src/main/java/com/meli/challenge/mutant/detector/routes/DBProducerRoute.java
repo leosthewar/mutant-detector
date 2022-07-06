@@ -46,6 +46,7 @@ public class DBProducerRoute extends ConfigurationRoute {
 		from("direct:producer-db-route").routeId("producer-db-route")
 			.log(LoggingLevel.DEBUG," Send to db ${body}")
 			.to(dbProperties.getRoute()+"?database="+dbProperties.getDatabase()+"&collection="+dbProperties.getCollection()+"&operation=insert")
+			.setBody(simple(""))
 			.log(LoggingLevel.INFO,"DNA saved successfully :${body} ")
 			.end();
 		
