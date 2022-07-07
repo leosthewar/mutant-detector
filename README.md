@@ -4,42 +4,16 @@
 
 Challenge técnico Mercado libre
 
-Servicio REST Post para detectar si una secuencia de ADN corresponde a un mutante y enviar el resultado de la validación a una topic de Kafka.
+Microservicio REST Post para detectar si una secuencia de ADN corresponde a un mutante y enviar el resultado de la validación a una topic de Kafka.
 
-# Herramientas, tecnologías y lenguajes
-
-- Sistema operativo: Windows 10
-- Java 11
-- Spring Boot 2.4.13
-- Camel 3.7.0
-- Undertow
-- Eclipse IDE
-- Visual Studio
-- Jacoco
-- Coveralls
-- Travis CI
-- JKube
-- MongoDB
-- Openshift
-- Apache kafka
-
-
-
-### Arquitectura de software y patrones destacados
-- Microservicios
-- Patrón de Integración empresarial - EIP
-- Patrón de cadena de responsabilidad
-- Arquitectura orientada a eventos 
-
-
-# Diagram EIP
+# Diagrama EIP
 ![My Image](eip-mutant-detector.drawio.png)
 
 # Descripción técnica
 
-El servicio expone un WS tipo Rest con el método POST -> /mutant/ para recibir una secuencia de ADN.
+El microservicio esta desarrollado con Spring Boot y Apache Camel, por lo cual se utilizan lineamientos del patron de integración.
 
-En la ruta de transformación, el servicio inicialmente realiza la validación de la estructura de la secuencia de ADN.
+El servicio expone un WS tipo Rest con el método POST -> /mutant/ para recibir una secuencia de ADN. En la ruta de transformación, el servicio inicialmente realiza la validación de la estructura de la secuencia de ADN.
 
 Si la estructura es invalida, el servicio responde con HTTP ->403 y mensaje con el error.
 
@@ -52,11 +26,11 @@ Una vez realizada la validación, produce un evento enviando un mensaje en el to
 Finalmente si el ADN corresponde a un mutante, el servicio responde HTTP-> 200, en caso contrario HTTP -> 403
  
 
-# Servicio mutant
-
+# API mutant
 ## POST /mutant/
-
-Request
+## Endpoint
+https://mutant-detector-leosthewar-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/mutant/
+## Request
 
 - Content-Type: application/json
 
@@ -68,25 +42,22 @@ Payload ejemplo
 ```
 
 
-Response
+## Response
 - HTTP Code 200 - Si el ADN es mutante
 - HTTP Code 403 - Si el ADN es NO mutante
 
 # Instrucciones de ejecución
-
 ## Ejecución local
-
 ### Prerrequisitos
-
-- [JDK 11](https://openjdk.org/projects/jdk/11/)
-- [Maven 3](https://maven.apache.org)
+- JDK 11
+- Maven 3
 
 Para ejecutar el servicio de manera local ejecute el comando 
 ```shell
 mvn spring-boot:run
 ```
 El servicio iniciaria en el puerto 8080.
-Para su ejecucion local puede usar el siguiente CURL
+CURL de ejemplo para consumir el servicio
 ```shell
 curl --location --request POST 'http://localhost:8080/mutant/' \
 --header 'Content-Type: application/json' \
@@ -97,17 +68,18 @@ curl --location --request POST 'http://localhost:8080/mutant/' \
 
 ## Despliegue en Openshift
 ### Prerrequisitos
+- JDK 11
+- Maven 3
 - Cluster de Openshift
 - Credenciales de acceso al cluster
 - CLI  Openshift
-Para este caso se uso un servidor sandbox proporcionado por Redhat https://developers.redhat.com/developer-sandbox
-
+- Apache Kafka
 
 
 Para desplegar el servicio en Openshift,  se usa la CLI de Openshift ejecutando los siguientes comandos 
 - Iniciar sesión  
 ```shell
-oc login
+oc login <host>
 ```
 - Seleccionar el Project ( en este caso en el sandbox crea un project de manera automática y no se permite crear mas , por lo cual este paso se puede omitir) 
 ```shell
@@ -124,7 +96,7 @@ mvn -Popenshift clean package  oc:build oc:resource oc:apply -DskipTests
 Se crearan, entre otros los  siguientes recursos de Openshift:
 
  - ImageStream "mutant-detector"
- - BuildConfig "mutant-detector"
+ - BuildConfig "mutant-detector-s2i"
  - DeploymentConfig "mutant-detector"
  - Service "mutant-detector"
  - Route  "mutant-detector"
@@ -153,3 +125,6 @@ curl --location --request POST 'https://mutant-detector-leosthewar-dev.apps.sand
 
 ### Consideraciones 
 Para las ejecuciones locales y en openshift se deben tener configuradas las properties de  conexión y credenciales del servidor de apache kafka
+
+## Documentación general de la prueba
+https://github.com/leosthewar/mutant-detector-meli-challenge
