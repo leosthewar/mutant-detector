@@ -1,5 +1,5 @@
 spec:
-  replicas: 10
+  replicas: 7
   template:
     spec:
       volumes:
@@ -9,10 +9,10 @@ spec:
       containers:
         - resources:
             limits:
-              cpu: 200m
+              cpu: 120m
               memory: 384Mi
             requests:
-              cpu: 100m
+              cpu: 60m
               memory: 256Mi
           env:
             - name: SPRING_CONFIG_LOCATION
