@@ -1,3 +1,6 @@
+metadata:
+  annotations:
+    haproxy.router.openshift.io/timeout: 120s
 spec:
   to:
     kind: Service
